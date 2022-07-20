@@ -12,7 +12,9 @@ export function Input(props: InputProps) {
 
 const FieldStyled = styled(Field)`
   width: 100%;
-  /* padding: 0; */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 20px;
 `;
 
 export type InputErrorMessageProps = ErrorMessageProps;
@@ -30,15 +32,16 @@ const ErrorMessageStyled = styled(ErrorMessage)`
   border-start-start-radius: 0;
   border-end-end-radius: 10px;
   border-end-start-radius: 10px;
-  border-color: #b30000;
-  background-color: #ff8080;
-  color: #ffffff;
+  border-color: #8B0000;
+  background-color: #ffc3c8;
+  color: #8B0000;
   text-align: center;
   padding-top: 5px;
   padding-right: 3px;
   padding-bottom: 5px;
   padding-left: 3px;
   width: 100%;
+  font-size: 20px;
 `;
 
 export const InputContainer = styled.div`

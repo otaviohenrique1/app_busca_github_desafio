@@ -29,8 +29,9 @@ export function HomePage() {
                 <InputErrorMessage name="termo" />
               </InputContainer>
               <ButtonGroup>
-                <Button type="submit">Buscar</Button>
-                <Button type="button" onClick={() => resetForm()}>Limpar</Button>
+                <ButtonBuscar type="submit">Buscar</ButtonBuscar>
+                <ButtonLimpar type="button" onClick={() => resetForm()}>Limpar</ButtonLimpar>
+                <Button type="button">Buscar</Button>
               </ButtonGroup>
             </FormStyled>
           );
@@ -55,4 +56,34 @@ const validationSchema = Yup.object().shape({
 const FormStyled = styled(Form)`
   width: 100%;
   max-width: 400px;
+`;
+
+const ButtonBuscar = styled(Button)`
+  background-color: #5f9ea0;
+  border-width: 1px;
+  border-style: outset;
+  border-color: #1d2e30;
+
+  &:hover {
+    background-color: #436e70;
+  }
+
+  &:active {
+    background-color: #263e40;
+  }
+`;
+
+const ButtonLimpar = styled(Button)`
+  background-color: #dc143c;
+  border-width: 1px;
+  border-style: outset;
+  border-color: #2f040d;
+
+  &:hover {
+    background-color: #a40e2f;
+  }
+
+  &:active {
+    background-color: #5e081b;
+  }
 `;
