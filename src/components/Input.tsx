@@ -37,9 +37,9 @@ const ErrorMessageStyled = styled(ErrorMessage)`
   color: #8B0000;
   text-align: center;
   padding-top: 5px;
-  padding-right: 3px;
+  /* padding-right: 3px; */
   padding-bottom: 5px;
-  padding-left: 3px;
+  /* padding-left: 3px; */
   width: 100%;
   font-size: 20px;
 `;
@@ -50,4 +50,5 @@ export const InputContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-bottom: 5px;
 `;
