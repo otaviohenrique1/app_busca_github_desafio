@@ -4,11 +4,11 @@ import styled from "styled-components";
 import { Input, InputContainer, InputErrorMessage } from "./Input";
 import { Button, ButtonGroup } from "./Button";
 
-interface FormSearchGithubUrlProps {
+interface FormSearchGithubUsernameProps {
   handleSubmitForm(values: FormSearchGithubUrlTypes): void;
 }
 
-export function FormSearchGithubUrl(props: FormSearchGithubUrlProps) {
+export function FormSearchGithubUsername(props: FormSearchGithubUsernameProps) {
   return (
     <Formik
       initialValues={initialValues}
