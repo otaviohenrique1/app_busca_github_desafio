@@ -10,14 +10,10 @@ export function HomePage() {
 
   function handleSubmitFormSearchGithubUrl(values: FormSearchGithubUrlTypes) {
     // axios.get("https://api.github.com/users/otaviohenrique1")
-    //   .then((data) => {
-    //     console.log(data.data);
-    //   })
-    //   .catch((error) => console.error(error));
-
-    axios.get("https://api.github.com/users/otaviohenrique1/repos")
+    // axios.get("https://api.github.com/users/otaviohenrique1/repos")
+    axios.get(`https://api.github.com/users/${values.github_username}/repos?per_page=100`)
       .then((data) => {
-        // console.log(data.data);
+        console.log(data.data);
         setDataRepositories(data.data);
       })
       .catch((error) => console.error(error));
@@ -29,7 +25,7 @@ export function HomePage() {
 
   return (
     <Center>
-      <h1>Busca</h1>
+      <h1 className="w-100 text-center mb-5 mt-3">Busca</h1>
       <FormSearchGithubUsername handleSubmitForm={handleSubmitFormSearchGithubUrl} />
       <FormFilter handleSubmitForm={handleSubmitFormFilter} />
       <ListRepositories data={dataRepositories} />

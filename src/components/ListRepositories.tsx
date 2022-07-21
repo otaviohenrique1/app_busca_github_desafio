@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
+import { Table } from "reactstrap";
 
 export interface Repository {
   id: string | number;
@@ -20,32 +21,40 @@ export function ListRepositories(props: ListRepositoriesProps) {
 
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Archived</th>
-        </tr>
-      </thead>
-      <tbody>
-        {(dataRepositories.length !== 0) ? (
-          dataRepositories.map((item, index) => {
-            const { id, name, archived } = item;
-            return (
-              <tr key={index}>
-                <td>{id}</td>
-                <td>{name}</td>
-                <td>{(archived).toString()}</td>
-              </tr>
-            );
-          })
-        ) : (
+    <>
+      <h2 className="w-100 text-center mb-3">Resultado</h2>
+      <TableStyled bordered striped>
+        <thead>
           <tr>
-            <td colSpan={3}>Lista vazia</td>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Archived</th>
           </tr>
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {(dataRepositories.length !== 0) ? (
+            dataRepositories.map((item, index) => {
+              const { id, name, archived } = item;
+              return (
+                <tr key={index}>
+                  <td>{id}</td>
+                  <td>{name}</td>
+                  <td>{(archived).toString()}</td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan={3}>Lista vazia</td>
+            </tr>
+          )}
+        </tbody>
+      </TableStyled>
+    </>
   );
 }
+
+const TableStyled = styled(Table)`
+  width: 100%;
+  max-width: 600px;
+`;

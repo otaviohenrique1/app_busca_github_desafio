@@ -2,7 +2,8 @@ import { Formik, Form, FormikProps } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
 import { Input, InputContainer, InputErrorMessage } from "./Input";
-import { Button, ButtonGroup } from "./Button";
+import { Button } from "./Button";
+import { ButtonGroup, InputGroup } from "reactstrap";
 
 interface FormSearchGithubUsernameProps {
   handleSubmitForm(values: FormSearchGithubUrlTypes): void;
@@ -18,34 +19,28 @@ export function FormSearchGithubUsername(props: FormSearchGithubUsernameProps) {
       {({ values, resetForm }: FormikProps<FormSearchGithubUrlTypes>) => (
         <FormStyled>
           <InputContainer>
-            <InputSearchContainer>
+            <InputGroup>
               <Input
                 type="text"
-                value={values.github_url}
-                name="github_url"
+                value={values.github_username}
+                name="github_username"
                 placeholder="Github url"
               />
               <ButtonGroup>
                 <Button
                   type="submit"
-                  font_color="#ffffff"
-                  border_color="#1d2e30"
-                  background_color="#5f9ea0"
-                  background_color_active="#263e40"
-                  background_color_hover="#436e70"
-                >Buscar</Button>
+                  color="primary"
+                  className="rounded-0"
+                  >Buscar</Button>
                 <Button
                   type="button"
+                  color="danger"
                   onClick={() => resetForm()}
-                  font_color="#ffffff"
-                  border_color="#2f040d"
-                  background_color="#dc143c"
-                  background_color_active="#5e081b"
-                  background_color_hover="#a40e2f"
-                >Limpar</Button>
+                  className="rounded-0"
+                  >Limpar</Button>
               </ButtonGroup>
-            </InputSearchContainer>
-            <InputErrorMessage name="github_url" />
+            </InputGroup>
+            <InputErrorMessage name="github_username" />
           </InputContainer>
         </FormStyled>
       )}
@@ -53,25 +48,20 @@ export function FormSearchGithubUsername(props: FormSearchGithubUsernameProps) {
   );
 }
 
-const InputSearchContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
 export interface FormSearchGithubUrlTypes {
-  github_url: string;
+  github_username: string;
 }
 
 export const initialValues: FormSearchGithubUrlTypes = {
-  github_url: "",
+  github_username: "",
 };
 
 export const validationSchema = Yup.object().shape({
-  github_url: Yup.string().required("Campo vazio"),
+  github_username: Yup.string().required("Campo vazio"),
 });
 
 const FormStyled = styled(Form)`
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
   margin-bottom: 20px;
 `;
