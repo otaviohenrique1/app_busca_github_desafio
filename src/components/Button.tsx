@@ -1,10 +1,18 @@
 import { ButtonHTMLAttributes } from 'react'
-import { Button as ReactstrapButton } from "reactstrap";
+import { Button as ReactstrapButton, ButtonProps as ReactstrapButtonProps } from "reactstrap";
 import styled from "styled-components";
 
+/*
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   color: "primary" | "secondary" | "success" | "info" | "warning" | "danger" | "link"
 };
+*/
+
+type ButtonPropsColor = { 
+  color: "primary" | "secondary" | "success" | "info" | "warning" | "danger" | "link"
+}
+
+export type ButtonProps = ReactstrapButtonProps & ButtonPropsColor;
 
 export function Button(props: ButtonProps) {
   return (
