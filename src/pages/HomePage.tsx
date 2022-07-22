@@ -5,15 +5,17 @@ import { ListRepositories, Repository } from "../components/ListRepositories";
 import { useState } from "react";
 import axios from "axios";
 import { TableRepositories } from "../components/TableRepositories";
+import { lista } from "../utils/lista";
 
 export function HomePage() {
   const [dataRepositories, setDataRepositories] = useState<Repository[]>([]);
   const [dataGithubUsername, setDataGithubUsername] = useState<string>("");
 
   function handleSubmitFormSearchGithubUrl(values: FormSearchGithubUrlTypes) {
+    setDataGithubUsername(values.github_username);
     // axios.get("https://api.github.com/users/otaviohenrique1")
     // axios.get("https://api.github.com/users/otaviohenrique1/repos")
-    axios.get(`https://api.github.com/users/${values.github_username}/repos?per_page=100`)
+    /* axios.get(`https://api.github.com/users/${values.github_username}/repos?per_page=100`)
       .then((data) => {
         // console.log("languages_url => ", data.data[75].languages_url);
         // languages_url =>  https://api.github.com/repos/otaviohenrique1/lista-veiculos-ts/languages
@@ -26,7 +28,6 @@ export function HomePage() {
         //   //   .catch((error) => console.error(error));
         //   console.log(values.github_username);
         //   console.log(item.name);
-
         //   return {
         //     id: item.id,
         //     name: item.name,
@@ -42,10 +43,10 @@ export function HomePage() {
         // console.log(data.data);
 
         setDataRepositories(data.data);
-        setDataGithubUsername(values.github_username);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => console.error(error)); */
     // axios.get(`https://api.github.com/repos/${values.github_username}/lista-veiculos-ts/languages`)
+    setDataRepositories(lista);
   }
 
   function handleSubmitFormFilter(values: FormFilterTypes) {

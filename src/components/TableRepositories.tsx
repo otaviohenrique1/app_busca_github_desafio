@@ -6,6 +6,12 @@ import {
   getPaginationRowModel,
   SortingState,
   getSortedRowModel,
+  SortingFn,
+  FilterFn,
+  getFilteredRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFacetedMinMaxValues,
 } from '@tanstack/react-table'
 import { useEffect, useState } from 'react'
 import { ButtonGroup, Input, Table } from 'reactstrap'
@@ -14,7 +20,6 @@ import { Button } from './Button'
 import { Repository } from './ListRepositories'
 import { MdOutlineFirstPage, MdOutlineLastPage, MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { BsArrowUp, BsArrowDown, BsArrowDownUp } from "react-icons/bs";
-import axios from 'axios'
 
 interface ListRepositoriesProps {
   data: Repository[];
