@@ -19,18 +19,36 @@ export function FormFilter(props: FormFilterProps) {
       {(formikProps: FormikProps<FormFilterTypes>) => {
         const { values, resetForm } = formikProps;
         return (
-          <FormStyled className="border-top border-bottom pt-3 pb-3">
+          <FormStyled className="border-top border-bottom pt-3 pb-3 w-100">
             <h2 className="w-100 text-center mb-3">Filtros</h2>
             <InputContainer>
               <Input
                 type="text"
-                value={values.repository_name}
-                name="repository_name"
+                value={values.name}
+                name="name"
                 placeholder="Nome do repósitorio"
               />
-              <InputErrorMessage name="repository_name" />
+              <InputErrorMessage name="name" />
             </InputContainer>
-            <InputGroup className="d-flex align-items-center justify-content-around">
+            <InputContainer>
+              <Input
+                type="text"
+                value={values.language}
+                name="language"
+                placeholder="Linguagem"
+              />
+              <InputErrorMessage name="language" />
+            </InputContainer>
+            <InputContainer>
+              <Input
+                type="text"
+                value={values.license}
+                name="license"
+                placeholder="Licença"
+              />
+              <InputErrorMessage name="license" />
+            </InputContainer>
+            <InputGroup className="d-flex align-items-center justify-content-around mt-3">
               <Checkbox
                 name="archived"
                 id="archived"
@@ -47,19 +65,21 @@ export function FormFilter(props: FormFilterProps) {
                 label={"Fork"}
               />
             </InputGroup>
-            <ButtonGroup className="mt-2">
-              <Button
-                type="submit"
-                color="info"
-                className="rounded-0"
-              >Filtrar</Button>
-              <Button
-                type="button"
-                color="danger"
-                className="rounded-0"
-                onClick={() => resetForm()}
-              >Limpar</Button>
-            </ButtonGroup>
+            <div className="w-100 d-flex justify-content-end mt-3">
+              <ButtonGroup>
+                <Button
+                  type="submit"
+                  color="success"
+                  className="rounded-0"
+                >Filtrar</Button>
+                <Button
+                  type="button"
+                  color="danger"
+                  className="rounded-0"
+                  onClick={() => resetForm()}
+                >Limpar</Button>
+              </ButtonGroup>
+            </div>
           </FormStyled>
         );
       }}
@@ -68,33 +88,29 @@ export function FormFilter(props: FormFilterProps) {
 }
 
 export interface FormFilterTypes {
-  repository_name: string;
+  name: string;
   language: string[] | string;
-  topics: string[] | string;
   license: any;
   archived: boolean;
   private: boolean;
   fork: boolean;
-  allow_forking: boolean;
 }
 
 export const initialValues: FormFilterTypes = {
-  repository_name: "",
+  name: "",
   private: false,
   fork: false,
   archived: false,
   language: "",
-  topics: "",
-  allow_forking: false,
   license: ""
 };
 
 export const validationSchema = Yup.object().shape({
-  repository_name: Yup.string().required("Campo vazio"),
+  name: Yup.string().required("Campo vazio"),
+  language: Yup.string().required("Campo vazio"),
 });
 
 const FormStyled = styled(Form)`
-  width: 100%;
   max-width: 600px;
   margin-bottom: 20px;
 `;
