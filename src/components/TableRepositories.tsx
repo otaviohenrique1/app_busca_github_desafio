@@ -3,50 +3,18 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  getPaginationRowModel
+  getPaginationRowModel,
+  SortingState,
+  getSortedRowModel,
 } from '@tanstack/react-table'
 import { useEffect, useState } from 'react'
 import { ButtonGroup, Input, Table } from 'reactstrap'
 import styled from 'styled-components'
 import { Button } from './Button'
 import { Repository } from './ListRepositories'
-import { BiLastPage, BiFirstPage } from "react-icons/bi";
 import { MdOutlineFirstPage, MdOutlineLastPage, MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-
-const columnHelper = createColumnHelper<Repository>()
-
-const columns = [
-  columnHelper.accessor('name', {
-    cell: info => info.getValue(),
-    header: () => "Nome",
-    footer: () => null,
-  }),
-  columnHelper.accessor('archived', {
-    cell: info => (info.getValue()) ? "Sim" : "Não",
-    header: () => "Arquivado",
-    footer: () => null,
-  }),
-  columnHelper.accessor('private', {
-    cell: info => (info.getValue()) ? "Sim" : "Não",
-    header: () => "Privado",
-    footer: () => null,
-  }),
-  columnHelper.accessor('fork', {
-    cell: info => (info.getValue()) ? "Sim" : "Não",
-    header: () => "Fork",
-    footer: () => null,
-  }),
-  columnHelper.accessor('language', {
-    cell: info => (info.getValue()) ? info.getValue() : "Não informado",
-    header: () => "Linguagem",
-    footer: () => null,
-  }),
-  columnHelper.accessor('license', {
-    cell: info => (info.getValue()) ? info.getValue() : "Não informado",
-    header: () => "Licença",
-    footer: () => null,
-  }),
-]
+import { BsArrowUp, BsArrowDown, BsArrowDownUp } from "react-icons/bs";
+import axios from 'axios'
 
 interface ListRepositoriesProps {
   data: Repository[];
@@ -55,17 +23,56 @@ interface ListRepositoriesProps {
 
 export function TableRepositories(props: ListRepositoriesProps) {
   const [dataRepositories, setDataRepositories] = useState<Repository[]>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   useEffect(() => {
     setDataRepositories(props.data);
-    console.log(props.data);
+    // console.log(props.data);
   }, [props.data]);
+
+  const columnHelper = createColumnHelper<Repository>()
+
+  const columns = [
+    columnHelper.accessor('name', {
+      cell: info => info.getValue(),
+      header: () => "Nome",
+      footer: () => null,
+    }),
+    columnHelper.accessor('archived', {
+      cell: info => (info.getValue()) ? "Sim" : "Não",
+      header: () => "Arquivado",
+      footer: () => null,
+    }),
+    columnHelper.accessor('private', {
+      cell: info => (info.getValue()) ? "Sim" : "Não",
+      header: () => "Privado",
+      footer: () => null,
+    }),
+    columnHelper.accessor('fork', {
+      cell: info => (info.getValue()) ? "Sim" : "Não",
+      header: () => "Fork",
+      footer: () => null,
+    }),
+    columnHelper.accessor('language', {
+      cell: info => (info.getValue()) ? info.getValue() : "Não informado",
+      header: () => "Linguagem",
+      footer: () => null,
+    }),
+    columnHelper.accessor('license', {
+      cell: info => (info.getValue()) ? info.getValue() : "Não informado",
+      header: () => "Licença",
+      footer: () => null,
+    }),
+  ]
 
   const table = useReactTable({
     data: dataRepositories,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    state: { sorting, },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
   })
 
   return (
@@ -78,10 +85,25 @@ export function TableRepositories(props: ListRepositoriesProps) {
                 <th key={header.id}>
                   {header.isPlaceholder
                     ? null
-                    : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
+                    : (
+                      <div
+                        {...{
+                          className: header.column.getCanSort()
+                            ? 'cursor-pointer select-none'
+                            : '',
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        <span className="ms-2">
+                          {{
+                            asc: <BsArrowUp color="#000000" size={20} />,
+                            desc: <BsArrowDown color="#000000" size={20} />,
+                          }[header.column.getIsSorted() as string] ?? <BsArrowDownUp color="#000000" size={20} />}
+                        </span>
+                      </div>
+                    )
+                  }
                 </th>
               ))}
             </tr>

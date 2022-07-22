@@ -90,6 +90,7 @@ export function FormFilter(props: FormFilterProps) {
 export interface FormFilterTypes {
   name: string;
   language: string[] | string;
+  languageList?: string[];
   license: any;
   archived: boolean;
   private: boolean;

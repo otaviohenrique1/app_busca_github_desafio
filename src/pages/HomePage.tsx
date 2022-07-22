@@ -15,11 +15,37 @@ export function HomePage() {
     // axios.get("https://api.github.com/users/otaviohenrique1/repos")
     axios.get(`https://api.github.com/users/${values.github_username}/repos?per_page=100`)
       .then((data) => {
+        // console.log("languages_url => ", data.data[75].languages_url);
+        // languages_url =>  https://api.github.com/repos/otaviohenrique1/lista-veiculos-ts/languages
+        // let result = [...data.data].map((item) => {
+        //   let resultLanguageList: any[] = [];
+        //   // axios.get(`https://api.github.com/repos/${values.github_username}/${item.name}/languages`)
+        //   //   .then((data) => {
+        //   //     resultLanguageList = data.data;
+        //   //   })
+        //   //   .catch((error) => console.error(error));
+        //   console.log(values.github_username);
+        //   console.log(item.name);
+
+        //   return {
+        //     id: item.id,
+        //     name: item.name,
+        //     language: item.language,
+        //     // languageList: resultLanguageList,
+        //     // languageList: [],
+        //     license: item.license,
+        //     archived: item.archived,
+        //     private: item.private,
+        //     fork: item.fork,
+        //   }
+        // })
         // console.log(data.data);
+
         setDataRepositories(data.data);
         setDataGithubUsername(values.github_username);
       })
       .catch((error) => console.error(error));
+    // axios.get(`https://api.github.com/repos/${values.github_username}/lista-veiculos-ts/languages`)
   }
 
   function handleSubmitFormFilter(values: FormFilterTypes) {
@@ -28,9 +54,9 @@ export function HomePage() {
     let repository_private = values.private;
     let fork = values.fork;
     let language = values.language;
-    let license = values.license ;
+    let license = values.license;
     // let resultado = dataRepositories.filter((item) => {});
-    console.log(values); 
+    console.log(values);
   }
 
   return (
