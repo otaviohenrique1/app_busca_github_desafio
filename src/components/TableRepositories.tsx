@@ -216,3 +216,62 @@ export function TableRepositories(props: ListRepositoriesProps) {
 const TableContainer = styled(Table)`
   max-width: 1000px;
 `;
+
+type DebouncedInputProps = {
+  value: string | number
+  onChange: (value: string | number) => void
+  debounce?: number
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>
+
+function DebouncedInput(props: DebouncedInputProps) {
+  const { value: initialValue, onChange, debounce = 500 } = props;
+
+  const [value, setValue] = useState(initialValue)
+
+  useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value)
+    }, debounce)
+
+    return () => clearTimeout(timeout)
+  }, [value])
+
+  return (
+    <input {...props} value={value} onChange={e => setValue(e.target.value)} />
+  )
+}
+
+/*
+function DebouncedInput({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}: {
+  value: string | number
+  onChange: (value: string | number) => void
+  debounce?: number
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
+  const [value, setValue] = React.useState(initialValue)
+
+  React.useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value)
+    }, debounce)
+
+    return () => clearTimeout(timeout)
+  }, [value])
+
+  return (
+    <input {...props} value={value} onChange={e => setValue(e.target.value)} />
+  )
+}
+*/
