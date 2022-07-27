@@ -5,7 +5,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useEffect, useState } from 'react'
-import { Repository } from './ListRepositories'
+import { Repository } from '../../utils/types';
 
 const columnHelper = createColumnHelper<Repository>()
 

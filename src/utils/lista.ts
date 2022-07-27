@@ -1,6 +1,30 @@
-import {Repository } from "../components/ListRepositories";
+import { Repository } from "./types";
 
-export const lista_1: Repository[] = [
+export const app_typescript_teste_commit_list = [
+  {
+    "sha": "2f3d6629107bf4f063fdc976ab0160fb49cc00ef",
+    "commit": {
+      "author": {
+        "name": "otavio",
+        "email": "otaviohelmsv@gmail.com",
+        "date": "2022-07-17T23:45:59Z"
+      },
+      "committer": {
+        "name": "otavio",
+        "email": "otaviohelmsv@gmail.com",
+        "date": "2022-07-17T23:45:59Z"
+      },
+      "message": "Commit 52",
+    }
+  }
+];
+
+
+export const app_typescript_teste_language_list = {
+  "TypeScript": 13378
+};
+
+export const lista_repositorios: Repository[] = [
   {
     id: "1",
     name: "app_busca_github_desafio",
@@ -53,7 +77,7 @@ export const lista_1: Repository[] = [
   },
   {
     id: "6",
-    name: "app_typescript_teste",
+    name: "app_typescript_teste2",
     language: "TypeScript",
     languageList: ["TypeScript"],
     license: "",
@@ -173,7 +197,7 @@ export const lista_1: Repository[] = [
   },
   {
     id: "18",
-    name: "",
+    name: "app_typescript_teste",
     language: "TypeScript",
     languageList: ["TypeScript"],
     license: "",

@@ -19,12 +19,12 @@ import {
 import { InputHTMLAttributes, useEffect, useMemo, useState } from 'react'
 import { ButtonGroup, Input, Table } from 'reactstrap'
 import styled from 'styled-components'
-import { Button } from './Button'
-import { Repository } from './ListRepositories'
+import { Button } from '../Button'
 import { MdOutlineFirstPage, MdOutlineLastPage, MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { BsArrowUp, BsArrowDown, BsArrowDownUp } from "react-icons/bs";
-import { Center } from './Center'
+import { Center } from '../Center'
 import { RankingInfo, rankItem, compareItems } from '@tanstack/match-sorter-utils'
+import { Repository } from '../../utils/types'
 // import { matchSorter } from 'match-sorter'
 
 interface ListRepositoriesProps {
@@ -33,6 +33,9 @@ interface ListRepositoriesProps {
 }
 
 declare module '@tanstack/table-core' {
+  interface FilterFns {
+    fuzzy: FilterFn<unknown>
+  }
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -46,22 +49,14 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 
 const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   let dir = 0
-
-  // Only sort by rank if the column has ranking information
   if (rowA.columnFiltersMeta[columnId]) {
     dir = compareItems(
       rowA.columnFiltersMeta[columnId]?.itemRank!,
       rowB.columnFiltersMeta[columnId]?.itemRank!
     )
   }
-
-  // Provide an alphanumeric fallback for when the item ranks are equal
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir
 }
-
-// function fuzzyTextFilterFn(rows: any, id: any, filterValue: any) {
-//   return matchSorter(rows, filterValue, { keys: [row => row.values[id]] });
-// }
 
 export function TableRepositories(props: ListRepositoriesProps) {
   const [dataRepositories, setDataRepositories] = useState<Repository[]>([]);
@@ -72,9 +67,8 @@ export function TableRepositories(props: ListRepositoriesProps) {
     // console.log(props.data);
   }, [props.data]);
 
-  const columnHelper = createColumnHelper<Repository>()
-
-  const columns = [
+  /* const columnHelper = createColumnHelper<Repository>() */
+  /* const columns = [
     columnHelper.accessor('name', {
       cell: info => info.getValue(),
       header: () => "Nome",
@@ -105,7 +99,7 @@ export function TableRepositories(props: ListRepositoriesProps) {
       header: () => "Licença",
       footer: () => null,
     }),
-  ]
+  ]; */
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState('')
@@ -123,7 +117,7 @@ export function TableRepositories(props: ListRepositoriesProps) {
           footer: () => null,
           // footer: props => props.column.id,
           filterFn: fuzzyFilter,
-          sortingFn: fuzzySort,
+          // sortingFn: fuzzySort,
         },
         {
           accessorFn: row => row.archived,

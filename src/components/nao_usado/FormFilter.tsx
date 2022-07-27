@@ -1,9 +1,10 @@
 import { Formik, Form, FormikProps } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
-import { Checkbox, Input, InputContainer, InputErrorMessage } from "./Input";
-import { Button } from "./Button";
+import { Checkbox, Input, InputContainer, InputErrorMessage } from "../Input";
+import { Button } from "../Button";
 import { ButtonGroup, InputGroup, Label } from "reactstrap";
+import { FormFilterTypes } from "../../utils/types";
 
 interface FormFilterProps {
   handleSubmitForm(values: FormFilterTypes): void;
@@ -85,16 +86,6 @@ export function FormFilter(props: FormFilterProps) {
       }}
     </Formik>
   );
-}
-
-export interface FormFilterTypes {
-  name: string;
-  language: string[] | string;
-  languageList?: string[];
-  license: any;
-  archived: boolean;
-  private: boolean;
-  fork: boolean;
 }
 
 export const initialValues: FormFilterTypes = {

@@ -1,14 +1,10 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { Table } from "reactstrap";
-import { FormFilterTypes } from "./FormFilter";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { Repository } from "../../utils/types";
 // import axios from "axios";
-
-export interface Repository extends FormFilterTypes {
-  id: string | number;
-}
 
 interface ListRepositoriesProps {
   data: Repository[];
