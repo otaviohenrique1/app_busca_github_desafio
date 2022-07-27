@@ -4,7 +4,7 @@ import { FormSearchGithubUsername, FormSearchGithubUrlTypes } from "../component
 import { useState } from "react";
 // import axios from "axios";
 // import { TableRepositories } from "../components/nao_usado/TableRepositories";
-import { lista_repositorios } from "../utils/lista";
+import { app_typescript_teste_commit_list, app_typescript_teste_language_list, lista_repositorios } from "../utils/lista";
 import { Repository } from "../utils/types";
 import { RepositoryTable } from "../components/RepositoryTable";
 
@@ -65,7 +65,27 @@ export function HomePage() {
     //     fork: false,
     //   }
     // ]);
-    setDataRepositories(lista_repositorios);
+    let resultado = lista_repositorios.map((item) => {
+      let languageList = Object.keys(app_typescript_teste_language_list);
+      
+      console.log(commits);
+      
+      return {
+        id: item.id,
+        name: item.name,
+        language: (item.language) ? item.language : "Não informado",
+        languageList,
+        // languageList: item.languageList,
+        license: (item.license) ? item.license : "Não informado",
+        archived: (item.archived) ? "Sim" : "Não",
+        private: (item.private) ? "Sim" : "Não",
+        fork: (item.fork) ? "Sim" : "Não",
+        commits: app_typescript_teste_commit_list,
+        // commits: item.commit,
+      };
+    });
+    setDataRepositories(resultado);
+    // setDataRepositories(lista_repositorios);
   }
 
   return (

@@ -1,19 +1,27 @@
-export interface Repository extends FormFilterTypes {
+export interface Repository {
   id: string | number;
+  name: string;
+  language: string[] | string;
+  languageList?: string[];
+  license: any;
+  archived: boolean | string;
+  private: boolean | string;
+  fork: boolean | string;
+  commit: Commit[];
 }
 
 export interface FormFilterTypes {
   name: string;
   language: string[] | string;
-  languageList?: string[];
+  languageList: string[];
   license: any;
-  archived: boolean;
-  private: boolean;
-  fork: boolean;
+  archived: boolean | string;
+  private: boolean | string;
+  fork: boolean | string;
+  commit: Commit[];
 }
 
 export interface Commit {
-  id: string | number;
   sha: string;
   author: string;
   email: string;
