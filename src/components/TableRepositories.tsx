@@ -1,30 +1,67 @@
 import {
+  useReactTable,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
   getPaginationRowModel,
   SortingState,
   getSortedRowModel,
+  ColumnFiltersState,
   SortingFn,
+  sortingFns,
   FilterFn,
-  getFilteredRowModel,
+  // getFilteredRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFacetedMinMaxValues,
+  ColumnDef,
 } from '@tanstack/react-table'
-import { useEffect, useState } from 'react'
+import { InputHTMLAttributes, useEffect, useMemo, useState } from 'react'
 import { ButtonGroup, Input, Table } from 'reactstrap'
 import styled from 'styled-components'
 import { Button } from './Button'
 import { Repository } from './ListRepositories'
 import { MdOutlineFirstPage, MdOutlineLastPage, MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { BsArrowUp, BsArrowDown, BsArrowDownUp } from "react-icons/bs";
+import { Center } from './Center'
+import { RankingInfo, rankItem, compareItems } from '@tanstack/match-sorter-utils'
+// import { matchSorter } from 'match-sorter'
 
 interface ListRepositoriesProps {
   data: Repository[];
   github_username: string;
 }
+
+declare module '@tanstack/table-core' {
+  interface FilterMeta {
+    itemRank: RankingInfo
+  }
+}
+
+const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+  const itemRank = rankItem(row.getValue(columnId), value);
+  addMeta({ itemRank });
+  return itemRank.passed
+}
+
+const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
+  let dir = 0
+
+  // Only sort by rank if the column has ranking information
+  if (rowA.columnFiltersMeta[columnId]) {
+    dir = compareItems(
+      rowA.columnFiltersMeta[columnId]?.itemRank!,
+      rowB.columnFiltersMeta[columnId]?.itemRank!
+    )
+  }
+
+  // Provide an alphanumeric fallback for when the item ranks are equal
+  return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir
+}
+
+// function fuzzyTextFilterFn(rows: any, id: any, filterValue: any) {
+//   return matchSorter(rows, filterValue, { keys: [row => row.values[id]] });
+// }
 
 export function TableRepositories(props: ListRepositoriesProps) {
   const [dataRepositories, setDataRepositories] = useState<Repository[]>([]);
@@ -70,18 +107,109 @@ export function TableRepositories(props: ListRepositoriesProps) {
     }),
   ]
 
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [globalFilter, setGlobalFilter] = useState('')
+
   const table = useReactTable({
     data: dataRepositories,
-    columns,
+    // columns,
+    columns: useMemo<ColumnDef<Repository>[]>(
+      () => [
+        {
+          accessorFn: row => row.name,
+          id: 'name',
+          header: 'Nome',
+          cell: info => info.getValue(),
+          footer: () => null,
+          // footer: props => props.column.id,
+          filterFn: fuzzyFilter,
+          sortingFn: fuzzySort,
+        },
+        {
+          accessorFn: row => row.archived,
+          id: 'archived',
+          cell: info => (info.getValue()) ? "Sim" : "Não",
+          header: "Arquivado",
+          footer: () => null,
+          // footer: props => props.column.id,
+          filterFn: fuzzyFilter, // Mudar
+        },
+        {
+          accessorFn: row => row.private,
+          id: 'private',
+          cell: info => (info.getValue()) ? "Sim" : "Não",
+          header: "Privado",
+          footer: () => null,
+          // footer: props => props.column.id,
+          filterFn: fuzzyFilter, // Mudar
+        },
+        {
+          accessorFn: row => row.fork,
+          id: 'fork',
+          cell: info => (info.getValue()) ? "Sim" : "Não",
+          header: "Fork",
+          footer: () => null,
+          // footer: props => props.column.id,
+          filterFn: fuzzyFilter, // Mudar
+        },
+        {
+          accessorFn: row => row.language,
+          id: 'language',
+          cell: info => (info.getValue()) ? info.getValue() : "Não informado",
+          header: "Linguagem",
+          footer: () => null,
+          // footer: props => props.column.id,
+          filterFn: fuzzyFilter,
+        },
+        {
+          accessorFn: row => row.license,
+          id: 'license',
+          cell: info => (info.getValue()) ? info.getValue() : "Não informado",
+          header: "Licença",
+          footer: () => null,
+          // footer: props => props.column.id,
+          filterFn: fuzzyFilter,
+        },
+      ],
+      []
+    ),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    state: { sorting, },
+    state: {
+      sorting,
+      columnFilters,
+      globalFilter
+    },
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    globalFilterFn: fuzzyFilter,
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
+    onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
   })
 
   return (
     <TableContainer className="p-2 w-100">
+      <Center className="mb-5">
+        <h2 className="w-100 text-center mb-3">Filtros</h2>
+        <TableFilterForm className="border-bottom pb-4">
+          <DebouncedInput
+            value={globalFilter ?? ''}
+            onChange={value => setGlobalFilter(String(value))}
+            type="text"
+            className="w-100 rounded-0
+            mb-2"
+            placeholder="Nome do repósitorio"
+          />
+          <Input type="text" className="w-100 rounded-0 mb-2" placeholder="Linguagem" />
+          <Input type="text" className="w-100 rounded-0" placeholder="Licença" />
+          <div>
+            {/*  */}
+          </div>
+        </TableFilterForm>
+      </Center>
       <Table bordered striped>
         <thead>
           {table.getHeaderGroups().map(headerGroup => (
@@ -106,6 +234,13 @@ export function TableRepositories(props: ListRepositoriesProps) {
                             desc: <BsArrowDown color="#000000" size={20} />,
                           }[header.column.getIsSorted() as string] ?? <BsArrowDownUp color="#000000" size={20} />}
                         </span>
+                        <DebouncedInput
+                          type="text"
+                          value={(header.column.getFilterValue() ?? '') as string}
+                          onChange={value => header.column.setFilterValue(value)}
+                          placeholder={`Search... (${header.column.getFacetedUniqueValues().size})`}
+                          className="w-36 border shadow rounded"
+                        />
                       </div>
                     )
                   }
@@ -221,7 +356,7 @@ type DebouncedInputProps = {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>
+} & Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'>
 
 function DebouncedInput(props: DebouncedInputProps) {
   const { value: initialValue, onChange, debounce = 500 } = props;
@@ -238,7 +373,7 @@ function DebouncedInput(props: DebouncedInputProps) {
     }, debounce)
 
     return () => clearTimeout(timeout)
-  }, [value])
+  }, [debounce, onChange, value])
 
   return (
     <input {...props} value={value} onChange={e => setValue(e.target.value)} />
@@ -275,3 +410,8 @@ function DebouncedInput({
   )
 }
 */
+
+const TableFilterForm = styled.div`
+  width: 100%;
+  max-width: 600px;
+`;

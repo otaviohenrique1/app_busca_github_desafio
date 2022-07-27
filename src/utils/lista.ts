@@ -1,6 +1,6 @@
 import {Repository } from "../components/ListRepositories";
 
-export const lista: Repository[] = [
+export const lista_1: Repository[] = [
   {
     id: "1",
     name: "app_busca_github_desafio",
