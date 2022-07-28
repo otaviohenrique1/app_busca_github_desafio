@@ -94,7 +94,9 @@ export const initialValues: FormFilterTypes = {
   fork: false,
   archived: false,
   language: "",
-  license: ""
+  license: "",
+  languageList: [],
+  commit: []
 };
 
 export const validationSchema = Yup.object().shape({

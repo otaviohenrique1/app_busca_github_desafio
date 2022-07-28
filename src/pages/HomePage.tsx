@@ -65,23 +65,18 @@ export function HomePage() {
     //     fork: false,
     //   }
     // ]);
-    let resultado = lista_repositorios.map((item) => {
-      let languageList = Object.keys(app_typescript_teste_language_list);
-      
-      console.log(commits);
-      
+    const resultado = lista_repositorios.map((item) => {
       return {
         id: item.id,
         name: item.name,
         language: (item.language) ? item.language : "Não informado",
-        languageList,
+        languageList: Object.keys(app_typescript_teste_language_list),
         // languageList: item.languageList,
         license: (item.license) ? item.license : "Não informado",
         archived: (item.archived) ? "Sim" : "Não",
         private: (item.private) ? "Sim" : "Não",
         fork: (item.fork) ? "Sim" : "Não",
-        commits: app_typescript_teste_commit_list,
-        // commits: item.commit,
+        commit: app_typescript_teste_commit_list,
       };
     });
     setDataRepositories(resultado);
